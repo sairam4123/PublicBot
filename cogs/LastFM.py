@@ -1,3 +1,5 @@
+"""Documentation is WIP for this file, if you need help with anything ask here"""
+
 """Commands for the song search module"""
 import discord
 from discord.ext import commands
