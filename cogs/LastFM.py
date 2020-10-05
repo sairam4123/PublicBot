@@ -1,18 +1,24 @@
-
+"""Commands for the song search module"""
 import discord
 from discord.ext import commands
 import urllib.request, json 
 import urllib
 
-"An API Key can be generated here: https://www.last.fm/api"
-api_key = 'Last.Fm API Key Goes Here'
+'''api key needs to be generated from here: https://www.last.fm/api'''
+api_key = 'api key goes here'
 
 
 class MusicCog(commands.Cog):
+    """
+    Commands for song searching
+    """
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command()
+    @commands.command(
+        name="getsong"
+        brif="a cog to get info about a song, takes in song name or song name and artist, formatting for the second is songname, artist with a comma seperating the two"
+    )
     async def getsong(self,ctx,*,args):
       try:
         if ', ' in args:
