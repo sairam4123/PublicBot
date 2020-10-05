@@ -1,4 +1,4 @@
-
+import os
 import discord
 from discord.ext import commands
 
@@ -21,3 +21,6 @@ extensions = [
 if __name__ == '__main__':  # Ensures this is the file being ran
 	for extension in extensions:
 		bot.load_extension(extension)  # Loades every extension.
+		
+token = os.environ.get("DISCORD_BOT_SECRET") 
+bot.run(token)  # Starts the bot
