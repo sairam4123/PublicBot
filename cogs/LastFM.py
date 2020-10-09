@@ -1,5 +1,3 @@
-"""Documentation is WIP for this file, if you need help with anything ask here"""
-
 """Commands for the song search module"""
 import discord
 from discord.ext import commands
@@ -18,8 +16,8 @@ class MusicCog(commands.Cog):
         self.bot = bot
 
     @commands.command(
-        name="getsong"
-        brif="a cog to get info about a song, takes in song name or song name and artist, formatting for the second is songname, artist with a comma seperating the two"
+        name="getsong",
+        brief="a command to get info about a song, takes in song name or song name and artist, formatting for the second is songname, artist with a comma seperating the two"
     )
     async def getsong(self,ctx,*,args):
       try:
@@ -36,7 +34,10 @@ class MusicCog(commands.Cog):
       except:
         await ctx.send('Invalid search term, try again')
 
-    @commands.command()
+    @commands.command(
+      name="getlyrics",
+      brief="a command to get lyrics of a song, takes in song name or song name and artist, formatting for the second is songname, artist with a comma seperating the two"
+    )
     async def getlyrics(self,ctx,*,args):
       try:
         if ', ' in args:
@@ -58,7 +59,10 @@ class MusicCog(commands.Cog):
       except:
         await ctx.send('Invalid search term, try again')
 
-    @commands.command()
+    @commands.command(
+      name="getalbum",
+      brief="a command to get info about a album, takes in an album name or album name and artist, formatting for the second is album name, artist with a comma seperating the two"
+    )
     async def getalbum(self,ctx,*,args):
       #try:
         if ', ' in args:
@@ -81,7 +85,10 @@ class MusicCog(commands.Cog):
       #except:
       #  await ctx.send('Invalid search term, try again')
       
-    @commands.command()
+    @commands.command(
+      name="getartist",
+      brief="A command that get's info about an artist, takes in an artist name"
+    )
     async def getartist(self,ctx,*,args):
       try:
         data = get_artist(args)
@@ -103,7 +110,10 @@ class MusicCog(commands.Cog):
       except:
         await ctx.send('Invalid search term, try again')
 
-    @commands.command()
+    @commands.command(
+      name="topsongs",
+      brief="Gets a list of the top songs on the world charts, this command doesn't require any args"
+    )
     async def topsongs(self,ctx):
       data=top_tracks()
       embed=discord.Embed(title='Top 10 Tracks',url='https://www.last.fm/charts')
@@ -113,7 +123,10 @@ class MusicCog(commands.Cog):
         count+=1
       await ctx.send(embed=embed)
     
-    @commands.command()
+    @commands.command(
+      name="topartists",
+      brief="Gets a list of the top artists on the world charts, this command doesn't require any args"
+    )
     async def topartists(self,ctx):
       data=top_artists()
       embed=discord.Embed(title='Top 10 Artists',url='https://www.last.fm/charts')
@@ -125,17 +138,22 @@ class MusicCog(commands.Cog):
 
 
 def setup(bot):
+    "Imports the cog"
     bot.add_cog(MusicCog(bot))
 
 
 
 def get_data(method,method2=''):
+  "returns the json data from the url, takes in the two pieces of a URL as outlined in the last.fm api docs"
+
   with urllib.request.urlopen("http://ws.audioscrobbler.com/2.0/?method="+method+"&api_key="+api_key+"&format=json"+method2) as url:
     data = json.loads(url.read().decode())
   return data
 
 
 def get_album(album,artist=''):
+  "returns the json data for a given album, takes in just an album or album and artist"
+
   if artist=='':
     album = urllib.parse.quote(album)
     data = get_data('album.search&album='+album)
@@ -149,11 +167,15 @@ def get_album(album,artist=''):
 
 
 def get_artist(artist):
+  "returns the json data for a given artist, takes in artist name"
+
   artist = urllib.parse.quote(artist)
   return get_data('artist.getinfo&artist='+artist)['artist']
 
 
 def get_track(track,artist=''):
+  "returns info about  a specific song/track takes in just a track or artist and track"
+
   artist = urllib.parse.quote(artist)
   track =  urllib.parse.quote(track)
   
@@ -167,6 +189,8 @@ def get_track(track,artist=''):
 
     
 def top_tracks():
+  "returns data of the top songs on the charts, requires no args"
+
   data = get_data('chart.gettoptracks')['tracks']['track']
   songs = []
   for f in data:
@@ -175,6 +199,8 @@ def top_tracks():
     
 
 def top_artists():
+  "returns data of the top artists takes in no args"
+
   data = get_data('chart.gettopartists')['artists']['artist']
   artists =[]
   for f in data:
